@@ -1,182 +1,224 @@
-# Edit this configuration file to define what should be installed on
-
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+# Arquivo principal de configuração do NixOS.
+#
+# Documentação:
+#   - man configuration.nix
+#   - https://search.nixos.org/options  (todas as opções disponíveis)
+#   - https://nixos.org/manual/nixos/stable/
 
 { config, pkgs, ... }:
 
-
 {
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
-	imports =
+  # ---------------------------------------------------------------------------
+  # Nix (o gerenciador de pacotes)
+  # ---------------------------------------------------------------------------
 
-		[ # Include the results of the hardware scan.
-		./hardware-configuration.nix
-		];
+  # Habilita os comandos modernos: `nix` (subcomandos) e `nix flake`.
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-# Use the systemd-boot EFI boot loader.
-	boot.loader.systemd-boot.enable = true;
-	boot.loader.efi.canTouchEfiVariables = true;
+  # ---------------------------------------------------------------------------
+  # Boot
+  # ---------------------------------------------------------------------------
 
-	networking.hostName = "nixos"; # Define your hostname.
-# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  imports = [
+    # Resultado do `nixos-generate-config` (discos, CPU, kernel modules...).
+    ./hardware-configuration.nix
+  ];
 
-# Configure network proxy if necessary
-# networking.proxy.default = "http://user:password@proxy:port/";
-# networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # Usa o systemd-boot como gerenciador de boot (UEFI).
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-# Enable networking
-		networking.networkmanager.enable = true;
+  # ---------------------------------------------------------------------------
+  # Rede
+  # ---------------------------------------------------------------------------
 
-# Set your time zone.
-	time.timeZone = "America/Sao_Paulo";
+  networking.hostName = "nixos";
 
-# Select internationalisation properties.
-	i18n.defaultLocale = "pt_BR.UTF-8";
+  # NetworkManager cuida do Wi-Fi, cabo, VPN, etc. (inclusive pela interface do KDE).
+  networking.networkmanager.enable = true;
 
-	i18n.extraLocaleSettings = {
-		LC_ADDRESS = "pt_BR.UTF-8";
-		LC_IDENTIFICATION = "pt_BR.UTF-8";
-		LC_MEASUREMENT = "pt_BR.UTF-8";
-		LC_MONETARY = "pt_BR.UTF-8";
-		LC_NAME = "pt_BR.UTF-8";
-		LC_NUMERIC = "pt_BR.UTF-8";
-		LC_PAPER = "pt_BR.UTF-8";
-		LC_TELEPHONE = "pt_BR.UTF-8";
-		LC_TIME = "pt_BR.UTF-8";
-	};
+  # ---------------------------------------------------------------------------
+  # Idioma, fuso horário e teclado
+  # ---------------------------------------------------------------------------
 
-# Enable the X11 windowing system.
-# You can disable this if you're only using the Wayland session.
-	services.xserver.enable = true;
+  time.timeZone = "America/Sao_Paulo";
 
-# Enable the KDE Plasma Desktop Environment.
-	services.displayManager.sddm.enable = true;
-	services.desktopManager.plasma6.enable = true;
+  i18n.defaultLocale = "pt_BR.UTF-8";
 
-# Configure keymap in X11
-	services.xserver.xkb = {
-		layout = "br";
-		variant = "";
-	};
+  # Formatos regionais (datas, números, moeda) em pt_BR.
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "pt_BR.UTF-8";
+    LC_IDENTIFICATION = "pt_BR.UTF-8";
+    LC_MEASUREMENT = "pt_BR.UTF-8";
+    LC_MONETARY = "pt_BR.UTF-8";
+    LC_NAME = "pt_BR.UTF-8";
+    LC_NUMERIC = "pt_BR.UTF-8";
+    LC_PAPER = "pt_BR.UTF-8";
+    LC_TELEPHONE = "pt_BR.UTF-8";
+    LC_TIME = "pt_BR.UTF-8";
+  };
 
-# Configure console keymap
-	console.keyMap = "br-abnt2";
+  # Teclado ABNT2 no X11 (sessão gráfica) e no console (TTY).
+  services.xserver.xkb = {
+    layout = "br";
+    variant = "";
+  };
+  console.keyMap = "br-abnt2";
 
-# Enable CUPS to print documents.
-	services.printing.enable = true;
+  # ---------------------------------------------------------------------------
+  # Ambiente gráfico (KDE Plasma 6 + SDDM)
+  # ---------------------------------------------------------------------------
 
-# Enable sound with pipewire.
-	services.pulseaudio.enable = false;
-	security.rtkit.enable = true;
-	services.pipewire = {
-		enable = true;
-		alsa.enable = true;
-		alsa.support32Bit = true;
-		pulse.enable = true;
-# If you want to use JACK applications, uncomment this
-# jack.enable = true;
-	};
+  services.xserver.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
-# Enable touchpad support (enabled default in most desktopManager).
-# services.libinput.enable = true;
+  # ---------------------------------------------------------------------------
+  # Impressão e som
+  # ---------------------------------------------------------------------------
 
-# Define a user account. Don't forget to set a password with ‘passwd’.
-	users.users."lucas" = {
-		isNormalUser = true;
-		description = "Lucas ";
-		extraGroups = [ "networkmanager" "wheel" ];
-		packages = with pkgs; [
-			kdePackages.kate
-#  thunderbird
-		];
-	};
+  services.printing.enable = true;
 
-# Install firefox.
-	programs.firefox.enable = true;
+  # PipeWire é o servidor de áudio atual (substitui o PulseAudio).
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # Para aplicações JACK, descomente:
+    # jack.enable = true;
+  };
 
-# Allow unfree packages
-	nixpkgs.config.allowUnfree = true;
+  # ---------------------------------------------------------------------------
+  # Usuário
+  # ---------------------------------------------------------------------------
 
-# List packages installed in system profile.
-# You can use https://search.nixos.org/ to find more packages (and options).
-	environment.systemPackages = with pkgs; [
-		neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-		git
-			flatpak
-			fastfetch
-			fish
-			kitty
-			zapzap
-			localsend
-			libreoffice
+  users.users."lucas" = {
+    isNormalUser = true;
+    description = "Lucas ";
+    # wheel = pode usar sudo | networkmanager = pode gerenciar a rede
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+      kdePackages.kate
+      # thunderbird
+    ];
+  };
 
-#   wget
-	];
+  # ---------------------------------------------------------------------------
+  # Programas do sistema
+  # ---------------------------------------------------------------------------
 
-# SERVIÇOS ADICIONADOS 
-# SERVIÇOS ADICIONADOS 
-	services.flatpak.enable = true;
+  # Firefox desativado (o Flatpak está habilitado mais abaixo, caso queira usá-lo).
+  programs.firefox.enable = false;
 
-# Força o sistema e o KRunner a lerem os atalhos (.desktop) do Flatpak
-	environment.extraInit = ''
-		XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share
-		'';
+  # nix-ld: permite executar binários dinâmicos pré-compilados que NÃO foram
+  # empacotados pelo Nix (por exemplo, um `.AppImage`, um binário baixado de um
+  # site, instaladores do VS Code/JetBrains, ferramentas de terceiros...).
+  #
+  # Sem isso esses binários falham com erro do tipo:
+  #   "No such file or directory" ao rodar um ELF (por falta do linker/loader).
+  #
+  # O nix-ld cria `/lib64/ld-linux-x86-64.so.2` apontando para o loader do Nix,
+  # e as bibliotecas listadas em `libraries` ficam disponíveis para esses
+  # binários (elas fazem o papel das libs de sistema de uma distro comum).
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # libstdc++ (necessária para a maioria dos programas compilados em C++).
+    stdenv.cc.cc.lib
+  ];
+  # Obs.: `programs.nix-ld.package` não é necessário, o padrão já é `pkgs.nix-ld`.
 
-# Integração correta para o ambiente KDE Plasma
-	xdg.portal = {
-		enable = true;
-		extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
-		config.common.default = "kde";
-	};
+  # Permite instalar pacotes com licença não livre (ex.: drivers, codecs...).
+  nixpkgs.config.allowUnfree = true;
 
+  # Pacotes disponíveis para todos os usuários (comando/início de sessão).
+  environment.systemPackages = with pkgs; [
+    # --- Editores e terminal ---
+    neovim # Editor (config do LazyVim em ./nvim, veja a seção "Dotfiles")
+    fish
+    kitty
 
+    # --- Ferramentas de desenvolvimento ---
+    git
+    lazygit # Interface de git no terminal (no Neovim: <leader>gg)
+    ripgrep # Busca por texto (usada pelo Telescope/busca do Neovim)
+    fd # Busca por arquivos (usada pelo Telescope)
+    curl # Downloads (usado pelo LazyVim e por plugins)
+    unzip # Extração (usada por alguns plugins)
+    gcc # Compilador C: necessário para o nvim-treesitter compilar os parsers
+    wl-clipboard # Clipboard do Neovim integrado ao Wayland do KDE
 
+    # --- Apps do dia a dia ---
+    flatpak
+    fastfetch
+    zapzap
+    localsend
+    libreoffice
+    # wget
+  ];
 
+  # ---------------------------------------------------------------------------
+  # Dotfiles versionados neste repositório
+  # ---------------------------------------------------------------------------
 
+  # O Neovim lê a config de ~/.config/nvim. Apontamos esse caminho para a pasta
+  # ./nvim deste repositório: a config fica versionada no git e, ao mesmo tempo,
+  # no lugar onde o Neovim espera encontrá-la.
+  #
+  # `L+` = cria/atualiza um symlink a cada boot (idempotente).
+  # Obs.: usamos o caminho REAL do repositório como texto. Se usássemos a
+  # interpolação de path do Nix aqui, a pasta seria copiada para /nix/store
+  # (somente leitura) e o LazyVim não conseguiria gravar o lazy-lock.json.
+  systemd.tmpfiles.rules = [
+    "L+ /home/lucas/.config/nvim - - - - /home/lucas/Projetos/dotfiles/nvim"
+  ];
 
+  # ---------------------------------------------------------------------------
+  # Flatpak
+  # ---------------------------------------------------------------------------
 
-# Some programs need SUID wrappers, can be configured further or are
-# started in user sessions.
-# programs.mtr.enable = true;
-# programs.gnupg.agent = {
-#   enable = true;
-#   enableSSHSupport = true;
-# };
+  services.flatpak.enable = true;
 
-# List services that you want to enable:
+  # Faz o sistema e o KRunner encontrarem os atalhos (.desktop) dos apps Flatpak.
+  environment.extraInit = ''
+    XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share
+  '';
 
-# Enable the OpenSSH daemon.
-# services.openssh.enable = true;
+  # Integração com os portais XDG (diálogos de arquivo, screenshots, etc.) no KDE.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+    config.common.default = "kde";
+  };
 
-# Open ports in the firewall.
-# networking.firewall.allowedTCPPorts = [ ... ];
-# networking.firewall.allowedUDPPorts = [ ... ];
-# Or disable the firewall altogether.
-# networking.firewall.enable = false;
+  # ---------------------------------------------------------------------------
+  # Serviços opcionais (descomente se precisar)
+  # ---------------------------------------------------------------------------
 
-# Copy the NixOS configuration file and link it from the resulting system
-# (/run/current-system/configuration.nix). This is useful in case you
-# accidentally delete configuration.nix.
-# system.copySystemConfiguration = true;
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+  # services.openssh.enable = true;
 
-# This option defines the first version of NixOS you have installed on this particular machine,
-# and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-#
-# Most users should NEVER change this value after the initial install, for any reason,
-# even if you've upgraded your system to a new NixOS release.
-#
-# This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-# so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-# to actually do that.
-#
-# This value being lower than the current NixOS release does NOT mean your system is
-# out of date, out of support, or vulnerable.
-#
-# Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-# and migrated your data accordingly.
-#
-# For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-	system.stateVersion = "26.05"; # Did you read the comment?
+  # Firewall:
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # networking.firewall.enable = false;
 
+  # Copia esta configuração para /run/current-system/configuration.nix
+  # system.copySystemConfiguration = true;
+
+  # ---------------------------------------------------------------------------
+  # Versão do estado do sistema
+  # ---------------------------------------------------------------------------
+
+  # Define a primeira versão do NixOS instalada nesta máquina. Serve para manter
+  # compatibilidade com dados criados por versões anteriores (bancos de dados,
+  # configs em /var/lib, etc.). NÃO altere isso após a instalação, mesmo que
+  # atualize o sistema — veja `man configuration.nix` (opção system.stateVersion).
+  system.stateVersion = "26.05";
 }
