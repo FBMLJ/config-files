@@ -66,12 +66,23 @@
   console.keyMap = "br-abnt2";
 
   # ---------------------------------------------------------------------------
-  # Ambiente gráfico (KDE Plasma 6 + SDDM)
+  # Ambiente gráfico (Niri + SDDM)
   # ---------------------------------------------------------------------------
 
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+
+  programs.niri.enable = true;
+
+  # ---------------------------------------------------------------------------
+  # Energia / bateria
+  # ---------------------------------------------------------------------------
+
+  # O UPower é quem expõe a bateria via D-Bus. O Noctalia (e vários outros apps,
+  # como gerenciadores de energia) consultam esse serviço para mostrar o nível
+  # de carga; sem ele a bateria simplesmente não aparece.
+  services.upower.enable = true;
 
   # ---------------------------------------------------------------------------
   # Impressão e som
@@ -148,7 +159,23 @@
     curl # Downloads (usado pelo LazyVim e por plugins)
     unzip # Extração (usada por alguns plugins)
     gcc # Compilador C: necessário para o nvim-treesitter compilar os parsers
-    wl-clipboard # Clipboard do Neovim integrado ao Wayland do KDE
+    wl-clipboard # Clipboard do Neovim integrado ao Wayland
+
+    # --- Wayland / Niri / Noctalia ---
+    niri
+    noctalia-shell
+    xdg-utils
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+    polkit_gnome
+    libnotify
+    brightnessctl
+    pamixer
+    playerctl
+    grim
+    slurp
+    swappy
+    swaybg
 
     # --- Apps do dia a dia ---
     flatpak
@@ -163,9 +190,10 @@
   # Dotfiles versionados neste repositório
   # ---------------------------------------------------------------------------
 
-  # O Neovim lê a config de ~/.config/nvim. Apontamos esse caminho para a pasta
-  # ./nvim deste repositório: a config fica versionada no git e, ao mesmo tempo,
-  # no lugar onde o Neovim espera encontrá-la.
+  # O Neovim lê a config de ~/.config/nvim e o Niri lê ~/.config/niri.
+  # Apontamos esses caminhos para as pastas ./nvim e ./niri deste repositório:
+  # as configs ficam versionadas no git e, ao mesmo tempo, no lugar onde os
+  # programas esperam encontrá-las.
   #
   # `L+` = cria/atualiza um symlink a cada boot (idempotente).
   # Obs.: usamos o caminho REAL do repositório como texto. Se usássemos a
@@ -173,6 +201,7 @@
   # (somente leitura) e o LazyVim não conseguiria gravar o lazy-lock.json.
   systemd.tmpfiles.rules = [
     "L+ /home/lucas/.config/nvim - - - - /home/lucas/Projetos/dotfiles/nvim"
+    "L+ /home/lucas/.config/niri - - - - /home/lucas/Projetos/dotfiles/niri"
   ];
 
   # ---------------------------------------------------------------------------
@@ -186,11 +215,11 @@
     XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share
   '';
 
-  # Integração com os portais XDG (diálogos de arquivo, screenshots, etc.) no KDE.
+  # Integração com os portais XDG (diálogos de arquivo, screenshots, etc.)
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
-    config.common.default = "kde";
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
   };
 
   # ---------------------------------------------------------------------------
