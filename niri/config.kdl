@@ -29,11 +29,9 @@ input {
 // ---------------------------------------------------------------------------
 
 cursor {
-    // Tamanho do ponteiro em pixels. O padrão do niri é 24; 16 deixa bem menor.
-    // Ajuste entre 16, 18, 20, 22... até ficar do seu gosto.
-    xcursor-size 16
+    xcursor-theme "Bibata-Modern-Amber-Right"
+    xcursor-size 24
 }
-
 // ---------------------------------------------------------------------------
 // Aparência das janelas
 // ---------------------------------------------------------------------------
@@ -73,8 +71,6 @@ layout {
 // Barra/painel do desktop (launcher, relógio, volume, etc.).
 spawn-at-startup "noctalia-shell"
 
-// Tela cheia automática com uma única janela (veja ./auto-column-width.sh).
-spawn-at-startup "bash" "/home/lucas/Projetos/dotfiles/niri/auto-column-width.sh"
 
 // Papel de parede: o Noctalia já gerencia. Se preferir o swaybg, descomente:
 // spawn-at-startup "swaybg" "-i" "/caminho/para/wallpaper.jpg"
