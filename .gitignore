@@ -1,0 +1,4 @@
+# Arquivos de estado/cache gerados pelos programas (não são config)
+/kitty/dark-theme.auto.conf
+/fish/fish_variables
+/fish/completions/

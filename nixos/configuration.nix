@@ -176,6 +176,7 @@
     slurp
     swappy
     swaybg
+    nautilus
 
     # --- Apps do dia a dia ---
     flatpak
@@ -190,18 +191,21 @@
   # Dotfiles versionados neste repositório
   # ---------------------------------------------------------------------------
 
-  # O Neovim lê a config de ~/.config/nvim e o Niri lê ~/.config/niri.
-  # Apontamos esses caminhos para as pastas ./nvim e ./niri deste repositório:
-  # as configs ficam versionadas no git e, ao mesmo tempo, no lugar onde os
-  # programas esperam encontrá-las.
+  # Cada programa lê sua config em ~/.config/<nome>. Apontamos esses caminhos
+  # para as pastas correspondentes deste repositório: as configs ficam
+  # versionadas no git e, ao mesmo tempo, no lugar onde os programas esperam
+  # encontrá-las.
   #
   # `L+` = cria/atualiza um symlink a cada boot (idempotente).
   # Obs.: usamos o caminho REAL do repositório como texto. Se usássemos a
   # interpolação de path do Nix aqui, a pasta seria copiada para /nix/store
-  # (somente leitura) e o LazyVim não conseguiria gravar o lazy-lock.json.
+  # (somente leitura) e o LazyVim/Noctalia não conseguiriam gravar seus arquivos.
   systemd.tmpfiles.rules = [
     "L+ /home/lucas/.config/nvim - - - - /home/lucas/Projetos/dotfiles/nvim"
     "L+ /home/lucas/.config/niri - - - - /home/lucas/Projetos/dotfiles/niri"
+    "L+ /home/lucas/.config/noctalia - - - - /home/lucas/Projetos/dotfiles/noctalia"
+    "L+ /home/lucas/.config/kitty - - - - /home/lucas/Projetos/dotfiles/kitty"
+    "L+ /home/lucas/.config/fish - - - - /home/lucas/Projetos/dotfiles/fish"
   ];
 
   # ---------------------------------------------------------------------------

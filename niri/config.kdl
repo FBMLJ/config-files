@@ -10,18 +10,19 @@
 // ---------------------------------------------------------------------------
 
 input {
-    keyboard {
-        xkb {
-            layout "br"
-            variant "abnt2"
-        }
-        numlock
+  keyboard {
+    xkb {
+      layout "br"
+      variant "abnt2"
     }
+    numlock
+  }
 
-    touchpad {
-        tap
-        natural-scroll
-    }
+  touchpad {
+    dwt
+    tap
+    natural-scroll
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -29,39 +30,39 @@ input {
 // ---------------------------------------------------------------------------
 
 cursor {
-    xcursor-theme "Bibata-Modern-Amber-Right"
-    xcursor-size 24
+  xcursor-theme "volantes_cursors"
+  xcursor-size 24
 }
 // ---------------------------------------------------------------------------
 // Aparência das janelas
 // ---------------------------------------------------------------------------
 
 layout {
-    gaps 16
-    center-focused-column "never"
-    // Largura inicial das janelas. O auto-column-width.sh ajusta o caso de
-    // janela única (100%); com 2+ janelas o niri segue o comportamento normal.
-    default-column-width { proportion 0.5; }
+  gaps 16
+  center-focused-column "never"
+  // Largura inicial das janelas. O auto-column-width.sh ajusta o caso de
+  // janela única (100%); com 2+ janelas o niri segue o comportamento normal.
+  default-column-width { proportion 0.5; }
 
-    preset-column-widths {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-    }
+  preset-column-widths {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
 
-    focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
-    }
+  focus-ring {
+    width 4
+    active-color "#7fc8ff"
+    inactive-color "#505050"
+  }
 
-    border {
-        off
-    }
+  border {
+    off
+  }
 
-    shadow {
-        on
-    }
+  shadow {
+    on
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -87,8 +88,8 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // Picture-in-Picture do Firefox abre flutuando.
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
+  match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+  open-floating true
 }
 
 // ---------------------------------------------------------------------------
@@ -97,107 +98,107 @@ window-rule {
 // Obs.: "Mod" é a tecla Super (Windows).
 
 binds {
-    // --- Programas ---
-    Mod+Return { spawn "kitty"; }
-    Mod+T      { spawn "kitty"; }
-    // Navegador (Zen, instalado via Flatpak).
-    Mod+B      { spawn "flatpak" "run" "app.zen_browser.zen"; }
-    Mod+Space  { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+  // --- Programas ---
+  Mod+Return { spawn "kitty"; }
+  Mod+T      { spawn "kitty"; }
+  // Navegador (Zen, instalado via Flatpak).
+  Mod+B      { spawn "flatpak" "run" "app.zen_browser.zen"; }
+  Mod+Space  { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
 
-    // --- Sessão ---
-    Mod+Q { close-window; }
-    Super+Alt+L { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-    Mod+Shift+E { quit; }
-    Mod+Shift+P { power-off-monitors; }
-    Mod+Shift+Slash { show-hotkey-overlay; }
+  // --- Sessão ---
+  Mod+Q { close-window; }
+  Super+Alt+L { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+  Mod+Shift+E { quit; }
+  Mod+Shift+P { power-off-monitors; }
+  Mod+Shift+Slash { show-hotkey-overlay; }
 
-    // --- Foco entre janelas/colunas ---
-    Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
-    Mod+Right { focus-column-right; }
-    Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
-    Mod+L     { focus-column-right; }
+  // --- Foco entre janelas/colunas ---
+  Mod+Left  { focus-column-left; }
+  Mod+Down  { focus-window-down; }
+  Mod+Up    { focus-window-up; }
+  Mod+Right { focus-column-right; }
+  Mod+H     { focus-column-left; }
+  Mod+J     { focus-window-down; }
+  Mod+K     { focus-window-up; }
+  Mod+L     { focus-column-right; }
 
-    // --- Mover janelas/colunas ---
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Down  { move-window-down; }
-    Mod+Ctrl+Up    { move-window-up; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+H     { move-column-left; }
-    Mod+Ctrl+J     { move-window-down; }
-    Mod+Ctrl+K     { move-window-up; }
-    Mod+Ctrl+L     { move-column-right; }
+  // --- Mover janelas/colunas ---
+  Mod+Ctrl+Left  { move-column-left; }
+  Mod+Ctrl+Down  { move-window-down; }
+  Mod+Ctrl+Up    { move-window-up; }
+  Mod+Ctrl+Right { move-column-right; }
+  Mod+Ctrl+H     { move-column-left; }
+  Mod+Ctrl+J     { move-window-down; }
+  Mod+Ctrl+K     { move-window-up; }
+  Mod+Ctrl+L     { move-column-right; }
 
-    // --- Monitores ---
-    Mod+Shift+Left  { focus-monitor-left; }
-    Mod+Shift+Down  { focus-monitor-down; }
-    Mod+Shift+Up    { focus-monitor-up; }
-    Mod+Shift+Right { focus-monitor-right; }
+  // --- Monitores ---
+  Mod+Shift+Left  { focus-monitor-left; }
+  Mod+Shift+Down  { focus-monitor-down; }
+  Mod+Shift+Up    { focus-monitor-up; }
+  Mod+Shift+Right { focus-monitor-right; }
 
-    // --- Workspaces ---
-    Mod+Page_Down { focus-workspace-down; }
-    Mod+Page_Up   { focus-workspace-up; }
-    Mod+U         { focus-workspace-down; }
-    Mod+I         { focus-workspace-up; }
-    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+U         { move-column-to-workspace-down; }
-    Mod+Ctrl+I         { move-column-to-workspace-up; }
+  // --- Workspaces ---
+  Mod+Page_Down { focus-workspace-down; }
+  Mod+Page_Up   { focus-workspace-up; }
+  Mod+U         { focus-workspace-down; }
+  Mod+I         { focus-workspace-up; }
+  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+  Mod+Ctrl+U         { move-column-to-workspace-down; }
+  Mod+Ctrl+I         { move-column-to-workspace-up; }
 
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
-    Mod+4 { focus-workspace 4; }
-    Mod+5 { focus-workspace 5; }
-    Mod+6 { focus-workspace 6; }
-    Mod+7 { focus-workspace 7; }
-    Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
+  Mod+1 { focus-workspace 1; }
+  Mod+2 { focus-workspace 2; }
+  Mod+3 { focus-workspace 3; }
+  Mod+4 { focus-workspace 4; }
+  Mod+5 { focus-workspace 5; }
+  Mod+6 { focus-workspace 6; }
+  Mod+7 { focus-workspace 7; }
+  Mod+8 { focus-workspace 8; }
+  Mod+9 { focus-workspace 9; }
+  Mod+Ctrl+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+2 { move-column-to-workspace 2; }
+  Mod+Ctrl+3 { move-column-to-workspace 3; }
+  Mod+Ctrl+4 { move-column-to-workspace 4; }
+  Mod+Ctrl+5 { move-column-to-workspace 5; }
+  Mod+Ctrl+6 { move-column-to-workspace 6; }
+  Mod+Ctrl+7 { move-column-to-workspace 7; }
+  Mod+Ctrl+8 { move-column-to-workspace 8; }
+  Mod+Ctrl+9 { move-column-to-workspace 9; }
 
-    // --- Tamanho e layout ---
-    Mod+R       { switch-preset-column-width; }
-    Mod+Shift+R { switch-preset-column-width-back; }
-    Mod+F       { maximize-column; }
-    Mod+Shift+F { fullscreen-window; }
-    Mod+M       { maximize-window-to-edges; }
-    Mod+C       { center-column; }
-    Mod+Minus   { set-column-width "-10%"; }
-    Mod+Equal   { set-column-width "+10%"; }
-    Mod+V       { toggle-window-floating; }
-    Mod+W       { toggle-column-tabbed-display; }
-    Mod+O       { toggle-overview; }
+  // --- Tamanho e layout ---
+  Mod+R       { switch-preset-column-width; }
+  Mod+Shift+R { switch-preset-column-width-back; }
+  Mod+F       { maximize-column; }
+  Mod+Shift+F { fullscreen-window; }
+  Mod+M       { maximize-window-to-edges; }
+  Mod+C       { center-column; }
+  Mod+Minus   { set-column-width "-10%"; }
+  Mod+Equal   { set-column-width "+10%"; }
+  Mod+V       { toggle-window-floating; }
+  Mod+W       { toggle-column-tabbed-display; }
+  Mod+O       { toggle-overview; }
 
-    // Expelir/consumir janelas de uma coluna.
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
-    Mod+Comma        { consume-window-into-column; }
-    Mod+Period       { expel-window-from-column; }
+  // Expelir/consumir janelas de uma coluna.
+  Mod+BracketLeft  { consume-or-expel-window-left; }
+  Mod+BracketRight { consume-or-expel-window-right; }
+  Mod+Comma        { consume-window-into-column; }
+  Mod+Period       { expel-window-from-column; }
 
-    // --- Áudio, brilho e mídia ---
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+  // --- Áudio, brilho e mídia ---
+  XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+  XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+  XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+  XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+  XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+  XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+  XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+  XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
-    // --- Screenshots ---
-    Print      { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print  { screenshot-window; }
+  // --- Screenshots ---
+  Print      { screenshot; }
+  Ctrl+Print { screenshot-screen; }
+  Alt+Print  { screenshot-window; }
 }
