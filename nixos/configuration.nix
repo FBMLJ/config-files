@@ -21,7 +21,10 @@
 
   imports = [
     # Resultado do `nixos-generate-config` (discos, CPU, kernel modules...).
-    ./hardware-configuration.nix
+    # Caminho ABSOLUTO: o Nix resolve imports relativos em relação ao arquivo
+    # real (o repo), então `./hardware-configuration.nix` pegaria o arquivo daqui
+    # do repo, que é específico da máquina antiga.
+    /etc/nixos/hardware-configuration.nix
   ];
 
   # Usa o systemd-boot como gerenciador de boot (UEFI).
